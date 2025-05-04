@@ -22,6 +22,9 @@ export class FournisseursComponent implements OnInit {
   isEditMode: boolean = false;
   fournisseurs: FournisseurDTO[] = [];
   fournisseur: FournisseurDTO = { username: '', email: '', raisonSociale: '', phoneNumber: '' }; // Initialiser avec un objet vide
+  isLoading = false;
+  isSaving = false;
+
 
   nouveauFournisseur: CreateFournisseurReq = {
     username: '',
@@ -43,12 +46,17 @@ export class FournisseursComponent implements OnInit {
   }
 
   loadFournisseurs() {
+    this.isLoading=true;
     this.fournisseurService.getAllFournisseurs().subscribe({
       next: (data) => {
-        console.log(data);
+        // console.log(data);
         this.fournisseurs = data;
+        this.isLoading=false;
       },
-      error: (err) => this.toastr.error('Erreur chargement fournisseurs')
+      error: (err) => {
+        this.isLoading=false;
+        this.toastr.error('Erreur chargement fournisseurs')
+      }
     });
   }
 
@@ -65,6 +73,7 @@ export class FournisseursComponent implements OnInit {
   }
   // Sauvegarder le fournisseur (ajouter ou modifier)
   saveFournisseur(form: any) {
+    this.isSaving = true;
     if (!form.valid) {
       form.control.markAllAsTouched(); // Pour afficher les erreurs visuellement
       return;
@@ -72,22 +81,26 @@ export class FournisseursComponent implements OnInit {
     if (this.isEditMode) {
       this.fournisseurService.updateFournisseur(this.fournisseur.id!, this.fournisseur).subscribe(
         (updatedFournisseur) => {
+          this.isSaving = false;
           this.closeModal();
           this.toastr.success('Fournisseur mis à jour avec succès');
           this.loadFournisseurs();
         },
         () => {
+          this.isSaving = false;
           this.toastr.error('Erreur de mise à jour');
         }
       );
     } else {
       this.fournisseurService.createFournisseur(this.fournisseur).subscribe(
         (newFournisseur) => {
+          this.isSaving = false;
           this.closeModal();
           this.toastr.success('Fournisseur ajouté avec succès');
           this.loadFournisseurs();
         },
         (error) => {
+          this.isSaving = false;
           this.toastr.error('Erreur d\'ajout veuillez essayer plus tard');
         }
       );

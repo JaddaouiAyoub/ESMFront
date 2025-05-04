@@ -28,7 +28,8 @@ export class ProduitsComponent implements OnInit {
   showFournisseurModal: boolean = false;
   produitToAffecter: ProduitDTO | null = null; // produit à affecter au fournisseur
   selectedProduitIdForAffectation: number | null = null;
-
+  isLoading=false;
+  isApplying = false;
   produit: ProduitDTO = {
     nom: '',
     quantiteStock: 0,
@@ -50,8 +51,13 @@ export class ProduitsComponent implements OnInit {
   }
 
   getProduits() {
+    this.isLoading=true;
     this.produitService.getAllProduits().subscribe((data) => {
+      this.isLoading=false;
       this.produits = data;
+    },(error) => {
+      this.isLoading=false;
+      this.toastr.error('Erreur de chargement des produits');
     });
   }
 
@@ -152,13 +158,20 @@ export class ProduitsComponent implements OnInit {
     this.selectedFournisseur = fournisseur;
   }
   // Appliquer la sélection du fournisseur au produit
+
   applyFournisseurSelection(): void {
+    this.isApplying = true;
     if (this.produitToAffecter && this.selectedFournisseur) {
       this.produitService.affecterProduitAFournisseur(this.produitToAffecter.id!, this.selectedFournisseur.id!).subscribe(() => {
         // Fermer le modal après avoir affecté le fournisseur
+        this.isApplying=false;
         this.getProduits(); // Recharger les produits
         this.closeFournisseurModal(); // Fermer le modal
-      });
+      }
+      , (error) => {
+        this.isApplying=false;
+        this.toastr.error('Erreur lors de l\'affectation du fournisseur');
+        });
     }
   }
 }

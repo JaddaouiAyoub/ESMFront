@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import {DashboardStats} from '../components/admin/dashboard/dashboard-stats.model';
 import {Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
+import {environment} from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DashboardService {
 
-  private apiUrl = 'https://esmback-production.up.railway.app/api/dashboard';
+  private apiUrl = environment.apiUrl+'/api/dashboard';
 
   constructor(private http: HttpClient) {}
 

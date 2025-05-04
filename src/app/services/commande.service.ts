@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import {environment} from '../../environments/environment';
 
 // Modèles à adapter selon tes interfaces réelles
 export interface LigneCommande {
@@ -32,7 +33,7 @@ export interface Commande {
 })
 export class CommandeService {
 
-  private apiUrl = 'https://esmback-production.up.railway.app/api/commandes'; // adapte si besoin
+  private apiUrl = environment.apiUrl+'/api/commandes'; // adapte si besoin
 
   constructor(private http: HttpClient) {}
 

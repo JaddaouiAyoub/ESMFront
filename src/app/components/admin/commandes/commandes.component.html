@@ -14,13 +14,20 @@
     </button>
   </div>
 
+  <!-- Spinner global pendant le chargement -->
+  <div *ngIf="isLoading" class="flex justify-center my-8">
+    <div class="flex items-center space-x-2">
+      <div class="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-blue-600"></div>
+      <span class="text-blue-600 font-medium">Chargement en cours...</span>
+    </div>
+  </div>
   <!-- Aucune commande -->
-  <div *ngIf="commandes.length === 0" class="text-center text-gray-500 mt-10">
+  <div *ngIf="!isLoading &&  commandes.length === 0" class="text-center text-gray-500 mt-10">
     Aucune commande à afficher.
   </div>
 
   <!-- Liste des commandes -->
-  <div *ngFor="let cmd of commandes" class="bg-white rounded-xl shadow-md p-4 mb-4 border border-blue-100">
+  <div  *ngFor="let cmd of commandes" class="bg-white rounded-xl shadow-md p-4 mb-4 border border-blue-100">
     <div class="flex justify-between items-center">
       <div>
         <h2 class="text-blue-700 font-semibold text-lg">Commande #{{ cmd.codeCommande }}</h2>
@@ -91,7 +98,7 @@
         </svg>
 
         <span *ngIf="!isLoading">Valider les modifications</span>
-        <span *ngIf="isLoading">Chargement...</span>
+        <span *ngIf="isLoading">Traitement...</span>
       </button>
 
     </div>

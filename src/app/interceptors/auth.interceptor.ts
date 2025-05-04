@@ -9,6 +9,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, catchError, switchMap, throwError, of } from 'rxjs';
 import {Router} from '@angular/router';
 import {AuthService} from '../services/auth.service';
+import {environment} from '../../environments/environment';
 
 export const authInterceptorFn: HttpInterceptorFn = (req: HttpRequest<any>, next: HttpHandlerFn): Observable<any> => {
   const excludedUrls = [
@@ -43,7 +44,7 @@ export const authInterceptorFn: HttpInterceptorFn = (req: HttpRequest<any>, next
           return throwError(() => error);
         }
 
-        return http.post<any>('http://localhost:8080/api/v1/auth/refresh', { 'token':refreshToken }).pipe(
+        return http.post<any>(environment.apiUrl+'/api/v1/auth/refresh', { 'token':refreshToken }).pipe(
           switchMap((res) => {
             const newToken = res.token; // Adapte selon ta réponse
             localStorage.setItem('token', newToken);

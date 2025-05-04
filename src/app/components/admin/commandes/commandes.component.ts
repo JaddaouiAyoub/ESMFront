@@ -33,14 +33,28 @@ export class CommandesComponent implements OnInit {
   }
 
   chargerCommandes(type: 'CREEE' | 'EN_COURS') {
-    console.log(`Chargement des commandes de type: ${type}`);
+    this.isLoading = true;
+    // console.log(`Chargement des commandes de type: ${type}`);
     this.selectedType = type;
     if (type === 'CREEE') {
-      this.commandeService.getCommandesCreees().subscribe(data => this.commandes = data);
-      console.log('Commandes créées:', this.commandes);
+      this.commandeService.getCommandesCreees().subscribe(data => {
+        this.isLoading = false;
+        this.commandes = data
+      },()=>{
+        this.isLoading = false;
+        this.toastr.error("Erreur de chargement des commandes");
+        }
+      );
+      // console.log('Commandes créées:', this.commandes);
     } else {
-      this.commandeService.getCommandesEnCours().subscribe(data => this.commandes = data);
-      console.log('Commandes en cours:', this.commandes);
+      this.commandeService.getCommandesEnCours().subscribe(data => {
+        this.isLoading = false;
+        this.commandes = data
+      },()=>{
+        this.isLoading = false;
+        this.toastr.error("Erreur de chargement des commandes");
+      });
+      // console.log('Commandes en cours:', this.commandes);
     }
   }
 

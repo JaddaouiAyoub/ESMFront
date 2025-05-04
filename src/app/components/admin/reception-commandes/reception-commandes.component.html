@@ -1,6 +1,13 @@
 <div class="p-4">
   <h2 class="text-xl font-bold mb-4">Commandes confirmées</h2>
-  <table class="min-w-full bg-white shadow rounded">
+  <!-- Spinner global pendant le chargement -->
+  <div *ngIf="isLoading" class="flex justify-center my-8">
+    <div class="flex items-center space-x-2">
+      <div class="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-blue-600"></div>
+      <span class="text-blue-600 font-medium">Chargement en cours...</span>
+    </div>
+  </div>
+  <table *ngIf="!isLoading" class="min-w-full bg-white shadow rounded">
     <thead class="bg-gray-200">
     <tr>
       <th class="px-4 py-2 text-left">Code</th>
@@ -45,8 +52,26 @@
       <!-- Boutons -->
       <div class="flex justify-end gap-2">
         <button class="bg-gray-300 px-4 py-1 rounded" (click)="fermerModal()">Annuler</button>
-        <button class="bg-green-500 text-white px-4 py-1 rounded" (click)="validerReception()">Valider</button>
+
+        <button
+          class="bg-green-500 text-white px-4 py-1 rounded flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+          [disabled]="isValidating"
+          (click)="validerReception()"
+        >
+          <ng-container *ngIf="!isValidating; else spinnerTpl">Valider</ng-container>
+          <ng-template #spinnerTpl>
+            <svg class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+                 viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10"
+                      stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor"
+                    d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+            </svg>
+            <span>Traitement...</span>
+          </ng-template>
+        </button>
       </div>
+
     </div>
   </div>
 </ng-template>

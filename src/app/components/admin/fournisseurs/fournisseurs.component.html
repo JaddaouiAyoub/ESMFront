@@ -68,14 +68,18 @@
                 class="px-4 py-2 bg-blue-100 text-blue-800 rounded-lg hover:bg-blue-200 transition"
                 (click)="closeModal()">Annuler</button>
         <button type="submit"
-                [disabled]="fournisseurForm.invalid"
+                [disabled]="fournisseurForm.invalid || isSaving"
                 class="px-4 py-2 rounded-lg transition text-white"
                 [ngClass]="{
-              'bg-blue-600 hover:bg-blue-700': !fournisseurForm.invalid,
-              'bg-gray-300 cursor-not-allowed': fournisseurForm.invalid
-            }">
-          {{ isEditMode ? 'Modifier' : 'Ajouter' }}
+          'bg-blue-600 hover:bg-blue-700': !fournisseurForm.invalid && !isSaving,
+          'bg-gray-300 cursor-not-allowed': fournisseurForm.invalid || isSaving
+        }">
+          <ng-container *ngIf="!isSaving">{{ isEditMode ? 'Modifier' : 'Ajouter' }}</ng-container>
+          <ng-container *ngIf="isSaving">
+            <i class="fas fa-spinner fa-spin mr-2"></i> Traitement...
+          </ng-container>
         </button>
+
       </div>
     </form>
 
@@ -84,7 +88,14 @@
 
 <!-- Tableau des Fournisseurs -->
 <div class="overflow-x-auto m-4">
-  <table class="min-w-full bg-white rounded-lg shadow border border-blue-200">
+  <!-- Spinner global pendant le chargement -->
+  <div *ngIf="isLoading" class="flex justify-center my-8">
+    <div class="flex items-center space-x-2">
+      <div class="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-blue-600"></div>
+      <span class="text-blue-600 font-medium">Chargement en cours...</span>
+    </div>
+  </div>
+  <table *ngIf="!isLoading" class="min-w-full bg-white rounded-lg shadow border border-blue-200">
     <thead class="bg-blue-50 text-blue-700 font-semibold">
     <tr>
       <th class="py-3 px-6 text-left">ID</th>
@@ -97,7 +108,9 @@
       <th class="py-3 px-6 text-center">Actions</th>
     </tr>
     </thead>
+
     <tbody>
+
     <tr *ngFor="let fournisseur of fournisseurs" class="border-t hover:bg-blue-50">
       <td class="py-3 px-6">{{ fournisseur.id }}</td>
       <td class="py-3 px-6">{{ fournisseur.username }}</td>

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import {environment} from '../../environments/environment';
 
 export interface FournisseurDTO {
   id?: number;
@@ -17,7 +18,7 @@ export interface FournisseurDTO {
 })
 export class FournisseurService {
 
-  private baseUrl = 'https://esmback-production.up.railway.app/api/fournisseurs'; // ➔ adapte si nécessaire !
+  private baseUrl = environment.apiUrl+'/api/fournisseurs'; // ➔ adapte si nécessaire !
 
   constructor(private http: HttpClient) {}
 

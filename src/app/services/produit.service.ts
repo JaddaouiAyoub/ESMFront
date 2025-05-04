@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import {environment} from '../../environments/environment';
 
 export interface ProduitDTO {
   id?: number;
@@ -16,7 +17,7 @@ export interface ProduitDTO {
   providedIn: 'root'
 })
 export class ProduitService {
-  private baseUrl = 'https://esmback-production.up.railway.app/api/produits'; // à adapter si besoin
+  private baseUrl = environment.apiUrl+'/api/produits'; // à adapter si besoin
 
   constructor(private http: HttpClient) {}
 
