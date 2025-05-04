@@ -1,0 +1,24 @@
+<div class="min-h-screen bg-gray-100 p-6">
+  <div class="flex justify-between items-center bg-white p-4 rounded shadow">
+    <h1 class="text-xl font-bold text-gray-800">User Dashboard</h1>
+
+    <div class="relative">
+      <button
+        (click)="toggleMenu()"
+        class="text-gray-600 hover:text-black text-2xl"
+        aria-label="Options"
+      >
+        ☰
+      </button>
+
+      <div *ngIf="showMenu" class="absolute right-0 mt-2 w-48 bg-white rounded shadow-md z-10">
+        <button (click)="logout()" class="block w-full text-left px-4 py-2 hover:bg-gray-100">Logout</button>
+        <button (click)="changePassword()" class="block w-full text-left px-4 py-2 hover:bg-gray-100">Changer le mot de passe</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-10 text-center text-gray-700 text-lg">
+    Bienvenue utilisateur !
+  </div>
+</div>

@@ -1,0 +1,124 @@
+<!-- Bouton Ajouter un Fournisseur -->
+<div class="flex justify-end m-4">
+  <button
+    (click)="openModal()"
+    class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+  >
+    <i class="fas fa-user-plus mr-2"></i> Ajouter un Fournisseur
+  </button>
+</div>
+
+<!-- Modal d'Ajout/Modification -->
+<div *ngIf="showModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+  <div class="bg-white p-8 rounded-xl w-full max-w-md border-t-4 border-blue-600 shadow-lg">
+    <h2 class="text-2xl font-bold mb-6 text-center text-blue-700">
+      {{ isEditMode ? 'Modifier un Fournisseur' : 'Ajouter un Fournisseur' }}
+    </h2>
+    <form (ngSubmit)="saveFournisseur(fournisseurForm)" #fournisseurForm="ngForm">
+      <!-- Username -->
+      <div class="mb-4">
+        <input type="text" placeholder="Nom d'utilisateur" name="username" [(ngModel)]="fournisseur.username" required #username="ngModel"
+               class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2"
+               [class.border-red-500]="username.invalid && username.touched"
+               [class.border-blue-300]="!(username.invalid && username.touched)" />
+        <p *ngIf="username.invalid && username.touched" class="text-red-500 text-sm mt-1">Le nom d'utilisateur est requis.</p>
+      </div>
+
+      <!-- Email -->
+      <div class="mb-4">
+        <input type="email" placeholder="Adresse e-mail" name="email" [(ngModel)]="fournisseur.email" required email #email="ngModel"
+               class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2"
+               [class.border-red-500]="email.invalid && email.touched"
+               [class.border-blue-300]="!(email.invalid && email.touched)" />
+        <p *ngIf="email.invalid && email.touched" class="text-red-500 text-sm mt-1">
+          {{ email.errors?.['required'] ? 'L\'email est requis.' : 'L\'email n\'est pas valide.' }}
+        </p>
+      </div>
+
+      <!-- First Name -->
+      <div class="mb-4">
+        <input type="text" placeholder="Raison sociale" name="firstName" [(ngModel)]="fournisseur.raisonSociale" required #firstName="ngModel"
+               class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2"
+               [class.border-red-500]="firstName.invalid && firstName.touched"
+               [class.border-blue-300]="!(firstName.invalid && firstName.touched)" />
+        <p *ngIf="firstName.invalid && firstName.touched" class="text-red-500 text-sm mt-1">Le prénom est requis.</p>
+      </div>
+
+      <!-- Last Name -->
+<!--      <div class="mb-4">-->
+<!--        <input type="text" placeholder="Last Name" name="lastName" [(ngModel)]="fournisseur.lastName" required #lastName="ngModel"-->
+<!--               class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2"-->
+<!--               [class.border-red-500]="lastName.invalid && lastName.touched"-->
+<!--               [class.border-blue-300]="!(lastName.invalid && lastName.touched)" />-->
+<!--        <p *ngIf="lastName.invalid && lastName.touched" class="text-red-500 text-sm mt-1">Le nom est requis.</p>-->
+<!--      </div>-->
+
+      <!-- Phone Number -->
+      <div class="mb-4">
+        <input type="text" placeholder="Numéro de téléphone" name="phoneNumber" [(ngModel)]="fournisseur.phoneNumber" required #phoneNumber="ngModel"
+               class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2"
+               [class.border-red-500]="phoneNumber.invalid && phoneNumber.touched"
+               [class.border-blue-300]="!(phoneNumber.invalid && phoneNumber.touched)" />
+        <p *ngIf="phoneNumber.invalid && phoneNumber.touched" class="text-red-500 text-sm mt-1">Le numéro de téléphone est requis.</p>
+      </div>
+
+      <!-- Boutons -->
+      <div class="flex justify-end space-x-4 mt-6">
+        <button type="button"
+                class="px-4 py-2 bg-blue-100 text-blue-800 rounded-lg hover:bg-blue-200 transition"
+                (click)="closeModal()">Annuler</button>
+        <button type="submit"
+                [disabled]="fournisseurForm.invalid"
+                class="px-4 py-2 rounded-lg transition text-white"
+                [ngClass]="{
+              'bg-blue-600 hover:bg-blue-700': !fournisseurForm.invalid,
+              'bg-gray-300 cursor-not-allowed': fournisseurForm.invalid
+            }">
+          {{ isEditMode ? 'Modifier' : 'Ajouter' }}
+        </button>
+      </div>
+    </form>
+
+  </div>
+</div>
+
+<!-- Tableau des Fournisseurs -->
+<div class="overflow-x-auto m-4">
+  <table class="min-w-full bg-white rounded-lg shadow border border-blue-200">
+    <thead class="bg-blue-50 text-blue-700 font-semibold">
+    <tr>
+      <th class="py-3 px-6 text-left">ID</th>
+      <th class="py-3 px-6 text-left">Nom d'utilisateur</th>
+      <th class="py-3 px-6 text-left">Adresse e-mail</th>
+      <th class="py-3 px-6 text-left">Raison sociale</th>
+<!--      <th class="py-3 px-6 text-left">Last Name</th>-->
+      <th class="py-3 px-6 text-left">Téléphone</th>
+      <th class="py-3 px-6 text-left">Code</th>
+      <th class="py-3 px-6 text-center">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let fournisseur of fournisseurs" class="border-t hover:bg-blue-50">
+      <td class="py-3 px-6">{{ fournisseur.id }}</td>
+      <td class="py-3 px-6">{{ fournisseur.username }}</td>
+      <td class="py-3 px-6">{{ fournisseur.email }}</td>
+      <td class="py-3 px-6">{{ fournisseur.raisonSociale }}</td>
+<!--      <td class="py-3 px-6">{{ fournisseur.lastName }}</td>-->
+      <td class="py-3 px-6">{{ fournisseur.phoneNumber }}</td>
+      <td class="py-3 px-6">{{ fournisseur.code }}</td>
+      <td class="py-3 px-6 flex justify-center space-x-2">
+        <button
+          class="flex items-center bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition"
+          (click)="editFournisseur(fournisseur)">
+          <i class="fas fa-edit mr-2"></i>
+        </button>
+        <button
+          class="flex items-center bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition"
+          (click)="deleteFournisseur(fournisseur.id)">
+          <i class="fas fa-trash-alt mr-2"></i>
+        </button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>

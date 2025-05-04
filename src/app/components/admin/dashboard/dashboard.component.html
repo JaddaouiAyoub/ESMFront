@@ -1,0 +1,86 @@
+<div class="p-6 bg-gray-100 min-h-screen">
+  <!-- Statistiques globales -->
+  <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
+    <div class="bg-white p-4 rounded-2xl shadow text-center font-semibold">
+      Total Commandes
+      <div class="text-2xl font-bold text-blue-600">{{ stats.totalCommandes }}</div>
+    </div>
+    <div class="bg-white p-4 rounded-2xl shadow text-center font-semibold">
+      Montant Total
+      <div class="text-2xl font-bold text-green-600">{{ stats.montantTotalCommandes }} MAD</div>
+    </div>
+    <div class="bg-white p-4 rounded-2xl shadow text-center font-semibold">
+      En Cours
+      <div class="text-2xl font-bold text-yellow-500">{{ stats.commandesEnCours }}</div>
+    </div>
+    <div class="bg-white p-4 rounded-2xl shadow text-center font-semibold">
+      Confirmées
+      <div class="text-2xl font-bold text-yellow-500">{{ stats.commandesConfirmees }}</div>
+    </div>
+    <div class="bg-white p-4 rounded-2xl shadow text-center font-semibold">
+      Reçues
+      <div class="text-2xl font-bold text-yellow-500">{{ stats.commandesRecues }}</div>
+    </div>
+    <div class="bg-white p-4 rounded-2xl shadow text-center font-semibold">
+      Partiellement Reçues
+      <div class="text-2xl font-bold text-orange-500">{{ stats.commandesPartiellementRecues }}</div>
+    </div>
+    <div class="bg-white p-4 rounded-2xl shadow text-center font-semibold">
+      En Retard
+      <div class="text-2xl font-bold text-red-500">{{ stats.commandesEnRetard }}</div>
+    </div>
+    <div
+      class="bg-yellow-100 p-4 rounded-2xl shadow text-center font-semibold text-yellow-800 border-l-4 border-yellow-500"
+      *ngIf="stats.produitsSousSeuil > 0"
+    >
+      ⚠️ Produits sous seuil :
+      <div class="text-2xl font-bold">{{ stats.produitsSousSeuil }}</div>
+    </div>
+  </div>
+
+  <!-- Graphiques -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+    <div class="bg-white p-4 rounded-2xl shadow h-85">
+      <h2 class="text-lg font-semibold mb-4">Commandes par statut</h2>
+      <ngx-charts-bar-vertical
+        [results]="statutChartData"
+        [scheme]="'vivid'"
+        [xAxis]="true"
+        [yAxis]="true"
+        [legend]="true"
+        [showDataLabel]="true"
+        [roundEdges]="true"
+        [barPadding]="8"
+        [animations]="true"
+      >
+      </ngx-charts-bar-vertical>
+    </div>
+
+    <div class="bg-white p-4 rounded-2xl shadow">
+      <h2 class="text-lg font-semibold mb-4">Commandes par fournisseur</h2>
+      <ngx-charts-pie-chart
+        [results]="fournisseurChartData"
+        [scheme]="'cool'"
+        [legend]="true"
+        [explodeSlices]="false"
+        [labels]="true"
+        [doughnut]="true"
+        [gradient]="true"
+      >
+      </ngx-charts-pie-chart>
+    </div>
+  </div>
+
+  <div class="bg-white p-4 rounded-2xl shadow  ">
+    <h2 class="text-lg font-semibold mb-4">Top produits commandés</h2>
+    <ngx-charts-bar-horizontal
+      [results]="topProduitsChartData"
+      [scheme]="'nightLights'"
+      [xAxis]="true"
+      [yAxis]="true"
+      [legend]="false"
+      [showDataLabel]="true"
+      [barPadding]="2">
+    </ngx-charts-bar-horizontal>
+  </div>
+</div>

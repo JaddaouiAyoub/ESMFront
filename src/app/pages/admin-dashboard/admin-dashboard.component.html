@@ -1,0 +1,58 @@
+<div class="bg-gray-100 flex flex-col h-screen">
+  <!-- Header -->
+  <div class="bg-white p-4 shadow flex justify-between items-center w-full">
+    <h1 class="text-xl font-bold text-gray-800">Admin Dashboard</h1>
+
+    <div class="relative">
+      <button
+        (click)="toggleMenu()"
+        class="text-gray-600 hover:text-black text-2xl"
+        aria-label="Options"
+      >
+        ☰
+      </button>
+
+      <div *ngIf="showMenu" class="absolute right-0 mt-2 w-48 bg-white rounded shadow-md z-10">
+        <button (click)="logout()" class="block w-full text-left px-4 py-2 hover:bg-gray-100">Logout</button>
+        <button (click)="changePassword()" class="block w-full text-left px-4 py-2 hover:bg-gray-100">Changer le mot de passe</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Body -->
+  <div class="flex flex-1 h-0">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white shadow-md hidden md:flex flex-col h-full">
+      <div class="p-6 overflow-y-auto">
+        <h2 class="text-lg font-semibold text-gray-800 mb-4">Menu</h2>
+        <nav class="flex flex-col space-y-2">
+          <a routerLink="/dashboard/admin/dashboard" routerLinkActive="bg-gray-200"
+             class="flex items-center px-4 py-2 rounded hover:bg-gray-100 text-gray-700 font-medium">
+            <span class="mr-2">🏠</span> Dashboard
+          </a>
+          <a routerLink="/dashboard/admin/fournisseurs" routerLinkActive="bg-gray-200"
+             class="flex items-center px-4 py-2 rounded hover:bg-gray-100 text-gray-700 font-medium">
+            <span class="mr-2">🚚</span> Fournisseurs
+          </a>
+          <a routerLink="/dashboard/admin/produits" routerLinkActive="bg-gray-200"
+             class="flex items-center px-4 py-2 rounded hover:bg-gray-100 text-gray-700 font-medium">
+            <span class="mr-2">📦</span> Produits
+          </a>
+          <a routerLink="/dashboard/admin/commandes" routerLinkActive="bg-gray-200"
+             class="flex items-center px-4 py-2 rounded hover:bg-gray-100 text-gray-700 font-medium">
+            <span class="mr-2">🛒</span> Commandes
+          </a>
+          <a routerLink="/dashboard/admin/reception-commandes" routerLinkActive="bg-gray-200"
+             class="flex items-center px-4 py-2 rounded hover:bg-gray-100 text-gray-700 font-medium">
+            <span class="mr-2">📦</span> Réception commandes
+          </a>
+        </nav>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-6 overflow-y-auto">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>
