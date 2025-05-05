@@ -34,9 +34,18 @@
           Annuler
         </button>
         <button type="submit"
-                class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
-          {{ isEditMode ? 'Modifier' : 'Ajouter' }}
+                class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                >
+          <ng-container *ngIf="!loading">
+            {{ isEditMode ? 'Modifier' : 'Ajouter' }}
+          </ng-container>
+          <ng-container *ngIf="loading">
+            <div class="spinner-border text-white" role="status">
+              <span class="sr-only">Chargement...</span>
+            </div>
+          </ng-container>
         </button>
+
       </div>
     </form>
   </div>

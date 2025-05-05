@@ -30,6 +30,8 @@ export class ProduitsComponent implements OnInit {
   selectedProduitIdForAffectation: number | null = null;
   isLoading=false;
   isApplying = false;
+  loading: boolean = false;
+
   produit: ProduitDTO = {
     nom: '',
     quantiteStock: 0,
@@ -68,6 +70,7 @@ export class ProduitsComponent implements OnInit {
   }
 
   openModal(produit?: ProduitDTO) {
+
     if (produit) {
       this.isEditMode = true;
       this.produit = { ...produit };
@@ -90,21 +93,26 @@ export class ProduitsComponent implements OnInit {
   }
 
   saveProduit() {
+    this.loading = true;
     if (this.isEditMode && this.produit.id) {
       this.produitService.updateProduit(this.produit.id, this.produit).subscribe(() => {
         this.toastr.success('Produit mis à jour avec succès');
+        this.loading = false;
         this.getProduits();
         this.closeModal();
       },()=>{
+        this.loading = false;
         this.toastr.error('Erreur de mise à jour du produit');
       });
     } else {
       this.produitService.createProduit(this.produit).subscribe(() => {
+        this.loading = false;
         this.toastr.success('Produit ajouté avec succès');
+          this.closeModal();
         this.getProduits();
-        this.closeModal();
       },
       () => {
+        this.loading = false;
         this.toastr.error('Erreur d\'ajout du produit');
       }
       );

@@ -4,6 +4,11 @@ import { Observable } from 'rxjs';
 import {environment} from '../../environments/environment';
 
 // Modèles à adapter selon tes interfaces réelles
+export interface SousLigneCommande {
+  id: number;
+  quantiteRecue: number;
+  dateReception: string;
+}
 export interface LigneCommande {
   id: number;
   nomProduit: string;
@@ -11,6 +16,7 @@ export interface LigneCommande {
   prixUnitaire: number;
   dateDexpeditionConfirmee: string; // format ISO: "2025-05-01"
   dateLivraisonPrevue: string; // format ISO: "2025-05-01"
+  sousLignes: SousLigneCommande[]; // ✅ ajouter cette ligne
 }
 export interface Fournisseur {
   id: number;
@@ -47,6 +53,11 @@ export class CommandeService {
   getCommandesConfirmees(): Observable<Commande[]> {
     return this.http.get<Commande[]>(`${this.apiUrl}/confirmees`);
   }
+
+  getCommandesPartiellementRecues(): Observable<Commande[]> {
+    return this.http.get<Commande[]>(`${this.apiUrl}/commandes/recues-partiellement`);
+  }
+
   receptionnerLigne(id: number, quantiteRecue: number, dateReception: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/lignes/${id}/reception`, {
       quantiteRecue,
