@@ -46,6 +46,10 @@
              class="flex items-center px-4 py-2 rounded hover:bg-gray-100 text-gray-700 font-medium">
             <span class="mr-2">📦</span> Réception commandes
           </a>
+          <a routerLink="/dashboard/admin/historique-receptions" routerLinkActive="bg-gray-200"
+             class="flex items-center px-4 py-2 rounded hover:bg-gray-100 text-gray-700 font-medium">
+            <span class="mr-2">📜</span> Historique réceptions
+          </a>
         </nav>
       </div>
     </aside>
@@ -54,5 +58,10 @@
     <main class="flex-1 p-6 overflow-y-auto">
       <router-outlet></router-outlet>
     </main>
+
   </div>
+  <footer class="bg-blue-100 text-blue-800 text-center py-4 shadow-md">
+    <p class="text-sm">&copy; Jaddaoui Ayoub 2025. Tous droits réservés.</p>
+  </footer>
+
 </div>

@@ -24,6 +24,10 @@ export class ProduitService {
   getAllProduits(): Observable<ProduitDTO[]> {
     return this.http.get<ProduitDTO[]>(this.baseUrl);
   }
+  getProduits(page: number, size: number): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}?page=${page}&size=${size}`);
+  }
+
 
   getProduitById(id: number): Observable<ProduitDTO> {
     return this.http.get<ProduitDTO>(`${this.baseUrl}/${id}`);

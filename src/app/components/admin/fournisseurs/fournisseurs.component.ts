@@ -24,6 +24,9 @@ export class FournisseursComponent implements OnInit {
   fournisseur: FournisseurDTO = { username: '', email: '', raisonSociale: '', phoneNumber: '' }; // Initialiser avec un objet vide
   isLoading = false;
   isSaving = false;
+  page: number = 0;
+  size: number = 5;
+  totalPages: number = 0;
 
 
   nouveauFournisseur: CreateFournisseurReq = {
@@ -47,17 +50,22 @@ export class FournisseursComponent implements OnInit {
 
   loadFournisseurs() {
     this.isLoading=true;
-    this.fournisseurService.getAllFournisseurs().subscribe({
-      next: (data) => {
-        // console.log(data);
-        this.fournisseurs = data;
-        this.isLoading=false;
+    this.fournisseurService.getFournisseurs(this.page, this.size).subscribe({
+      next: (res) => {
+        this.fournisseurs = res.content;
+        this.totalPages = res.totalPages;
+        this.isLoading = false;
       },
-      error: (err) => {
-        this.isLoading=false;
-        this.toastr.error('Erreur chargement fournisseurs')
+      error: () => {
+        this.isLoading = false
+        this.toastr.error('Erreur de chargement des fournisseurs');
       }
     });
+  }
+
+  changePage(newPage: number) {
+    this.page = newPage;
+    this.loadFournisseurs();
   }
 
   // Ouvrir le modal en mode édition ou ajout

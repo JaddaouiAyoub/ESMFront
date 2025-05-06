@@ -29,8 +29,12 @@ export class FournisseurService {
 
   // ➤ Récupérer tous les fournisseurs
   getAllFournisseurs(): Observable<FournisseurDTO[]> {
-    return this.http.get<FournisseurDTO[]>(`${this.baseUrl}`);
+    return this.http.get<FournisseurDTO[]>(`${this.baseUrl}/all`);
   }
+  getFournisseurs(page: number, size: number): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}?page=${page}&size=${size}`);
+  }
+
 
   // ➤ Récupérer un fournisseur par ID
   getFournisseurById(id: number): Observable<FournisseurDTO> {

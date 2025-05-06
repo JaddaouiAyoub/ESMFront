@@ -9,19 +9,19 @@
       Montant Total
       <div class="text-2xl font-bold text-green-600">{{ stats.montantTotalCommandes }} MAD</div>
     </div>
-    <div class="bg-white p-4 rounded-2xl shadow text-center font-semibold">
+    <div routerLink="/dashboard/admin/commandes" class="bg-white p-4 rounded-2xl shadow text-center font-semibold cursor-pointer">
       En Cours
       <div class="text-2xl font-bold text-yellow-500">{{ stats.commandesEnCours }}</div>
     </div>
-    <div class="bg-white p-4 rounded-2xl shadow text-center font-semibold">
+    <div routerLink="/dashboard/admin/reception-commandes"  class="bg-white p-4 rounded-2xl shadow text-center font-semibold cursor-pointer">
       Confirmées
       <div class="text-2xl font-bold text-yellow-500">{{ stats.commandesConfirmees }}</div>
     </div>
-    <div class="bg-white p-4 rounded-2xl shadow text-center font-semibold">
+    <div routerLink="/dashboard/admin/historique-receptions" class="bg-white p-4 rounded-2xl shadow text-center font-semibold cursor-pointer">
       Reçues
       <div class="text-2xl font-bold text-yellow-500">{{ stats.commandesRecues }}</div>
     </div>
-    <div class="bg-white p-4 rounded-2xl shadow text-center font-semibold">
+    <div routerLink="/dashboard/admin/reception-commandes" class="bg-white p-4 rounded-2xl shadow text-center font-semibold cursor-pointer">
       Partiellement Reçues
       <div class="text-2xl font-bold text-orange-500">{{ stats.commandesPartiellementRecues }}</div>
     </div>
@@ -29,8 +29,8 @@
       En Retard
       <div class="text-2xl font-bold text-red-500">{{ stats.commandesEnRetard }}</div>
     </div>
-    <div
-      class="bg-yellow-100 p-4 rounded-2xl shadow text-center font-semibold text-yellow-800 border-l-4 border-yellow-500"
+    <div routerLink="/dashboard/admin/produits"
+      class="bg-yellow-100 p-4 rounded-2xl shadow text-center font-semibold text-yellow-800 border-l-4 border-yellow-500 cursor-pointer"
       *ngIf="stats.produitsSousSeuil > 0"
     >
       ⚠️ Produits sous seuil :

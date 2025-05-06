@@ -31,6 +31,9 @@ export class ProduitsComponent implements OnInit {
   isLoading=false;
   isApplying = false;
   loading: boolean = false;
+  page: number = 0;
+  size: number = 5;
+  totalPages: number = 0;
 
   produit: ProduitDTO = {
     nom: '',
@@ -54,13 +57,21 @@ export class ProduitsComponent implements OnInit {
 
   getProduits() {
     this.isLoading=true;
-    this.produitService.getAllProduits().subscribe((data) => {
-      this.isLoading=false;
-      this.produits = data;
-    },(error) => {
-      this.isLoading=false;
-      this.toastr.error('Erreur de chargement des produits');
+    this.produitService.getProduits(this.page, this.size).subscribe({
+      next: (res) => {
+        this.produits = res.content;
+        this.totalPages = res.totalPages;
+        this.isLoading = false;
+      },
+      error: () => {
+        this.isLoading = false;
+        this.toastr.error('Erreur lors de la récupération des produits', 'Erreur');
+      }
     });
+  }
+  changePage(newPage: number) {
+    this.page = newPage;
+    this.getProduits();
   }
 
   getFournisseurs() {
@@ -173,8 +184,9 @@ export class ProduitsComponent implements OnInit {
       this.produitService.affecterProduitAFournisseur(this.produitToAffecter.id!, this.selectedFournisseur.id!).subscribe(() => {
         // Fermer le modal après avoir affecté le fournisseur
         this.isApplying=false;
-        this.getProduits(); // Recharger les produits
         this.closeFournisseurModal(); // Fermer le modal
+        this.toastr.success('Fournisseur affecté avec succès');
+        this.getProduits(); // Recharger les produits
       }
       , (error) => {
         this.isApplying=false;
