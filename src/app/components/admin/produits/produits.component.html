@@ -14,28 +14,66 @@
     <h2 class="text-2xl font-semibold text-blue-600 text-center mb-6">
       {{ isEditMode ? 'Modifier un Produit' : 'Ajouter un Produit' }}
     </h2>
-    <form (ngSubmit)="saveProduit()">
+    <form #form="ngForm" (ngSubmit)="saveProduit()">
       <div class="space-y-4">
-        <input type="text" placeholder="Nom" [(ngModel)]="produit.nom" name="nom"
-               class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required />
-        <input type="number" placeholder="Quantité en stock" [(ngModel)]="produit.quantiteStock" name="quantiteStock"
-               class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required />
-        <input type="number" placeholder="Quantité vendue" [(ngModel)]="produit.quantiteVendu" name="quantiteVendu"
+
+        <!-- Champ Nom -->
+        <input type="text" placeholder="Nom" [(ngModel)]="produit.nom" name="nom" required
+               #nom="ngModel"
+               minlength="4"
                class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        <div *ngIf="nom.invalid && nom.touched" class="text-red-600 text-sm">
+          Le nom est requis .
+        </div>
+
+        <!-- Champ Quantité en stock -->
+        <input type="number" placeholder="Quantité en stock" [(ngModel)]="produit.quantiteStock" name="quantiteStock" required
+               #quantiteStock="ngModel"
+               min="0"
+               class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        <div *ngIf="quantiteStock.invalid && quantiteStock.touched" class="text-red-600 text-sm">
+          La quantité en stock est requise et doit être supérieure ou égale à 0.
+        </div>
+
+        <!-- Champ Quantité vendue -->
+        <input type="number" placeholder="Quantité vendue" [(ngModel)]="produit.quantiteVendu" name="quantiteVendu" min="0"
+               class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+
+        <!-- Champ Seuil ROP -->
         <input type="number" placeholder="Seuil ROP" [(ngModel)]="produit.reorderPoint" name="reorderPoint"
+                min="0"
+               #reorderPoint="ngModel"
                class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-        <input type="number" step="0.01" placeholder="Prix" [(ngModel)]="produit.prix" name="prix"
-               class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required />
+        <div *ngIf="reorderPoint.invalid && reorderPoint.touched" class="text-red-600 text-sm">
+          Le seuil ROP doit être supérieur ou égal à 0.
+        </div>
+
+        <!-- Champ Prix -->
+        <input type="number" step="0.5" placeholder="Prix" [(ngModel)]="produit.prix" name="prix" required
+               #prix="ngModel"
+               min="0"
+               class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        <div *ngIf="prix.invalid && prix.touched" class="text-red-600 text-sm">
+          Le prix est requis et doit être supérieure ou égale à 0.
+        </div>
+
       </div>
 
+      <!-- Boutons -->
       <div class="flex justify-end space-x-4 mt-6">
         <button type="button" (click)="closeModal()"
                 class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">
           Annuler
         </button>
-        <button type="submit"
-                class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-                >
+        <button
+          type="submit"
+          [disabled]="form.invalid || loading"
+          [ngClass]="{
+    'bg-blue-600 hover:bg-blue-700 cursor-pointer': !form.invalid && !loading,
+    'bg-gray-300 cursor-not-allowed': form.invalid || loading
+  }"
+          class="px-4 py-2 text-white rounded-lg transition"
+        >
           <ng-container *ngIf="!loading">
             {{ isEditMode ? 'Modifier' : 'Ajouter' }}
           </ng-container>
@@ -48,6 +86,7 @@
 
       </div>
     </form>
+
   </div>
 </div>
 
@@ -127,10 +166,10 @@
     <tbody>
     <tr *ngFor="let p of produits"
         [ngClass]="{
-      'bg-red-50 text-red-800': p.quantiteStock < p.reorderPoint,
+      'bg-red-50 text-red-800':  isBelowReorderPoint(p),
       'hover:bg-gray-50': true
     }"
-        [attr.title]="p.quantiteStock < p.reorderPoint ? 'Produit sous seuil de réapprovisionnement' : null"
+        [attr.title]=" isBelowReorderPoint(p) ? 'Produit sous seuil de réapprovisionnement' : null"
         class="border-t transition">
       <td class="py-3 px-6">{{ p.nom }}</td>
       <td class="py-3 px-6">{{ p.quantiteStock }}</td>

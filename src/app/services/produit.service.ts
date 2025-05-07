@@ -6,10 +6,10 @@ import {environment} from '../../environments/environment';
 export interface ProduitDTO {
   id?: number;
   nom: string;
-  quantiteStock: number;
-  quantiteVendu: number;
-  reorderPoint: number;
-  prix: number;
+  quantiteStock: number | null;
+  quantiteVendu: number  | null;
+  reorderPoint: number|null;
+  prix : number | null;
   fournisseurId?: number;
 }
 

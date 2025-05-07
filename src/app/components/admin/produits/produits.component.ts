@@ -35,6 +35,7 @@ export class ProduitsComponent implements OnInit {
   size: number = 5;
   totalPages: number = 0;
 
+
   produit: ProduitDTO = {
     nom: '',
     quantiteStock: 0,
@@ -89,11 +90,11 @@ export class ProduitsComponent implements OnInit {
       this.isEditMode = false;
       this.produit = {
         nom: '',
-        quantiteStock: 0,
-        quantiteVendu: 0,
-        reorderPoint: 0,
-        prix: 0,
-        fournisseurId: undefined,
+        quantiteStock: null,
+        quantiteVendu: null,
+        reorderPoint: null,
+        prix: null,
+        fournisseurId: 0,
       }as ProduitDTO;
     }
     this.showModal = true;
@@ -140,22 +141,14 @@ export class ProduitsComponent implements OnInit {
       });
   }
 
-  openAffectationPopup(produitId: number) {
-    this.selectedProduitIdForAffectation = produitId;
-    this.showFournisseurPopup = true;
+  isBelowReorderPoint(p: ProduitDTO): boolean {
+    return (
+      p.quantiteStock != null &&
+      p.reorderPoint != null &&
+      p.quantiteStock < p.reorderPoint
+    );
   }
 
-  affecterFournisseur(fournisseurId: number) {
-    if (this.selectedProduitIdForAffectation != null) {
-      this.produitService
-        .affecterProduitAFournisseur(this.selectedProduitIdForAffectation, fournisseurId)
-        .subscribe(() => {
-          this.getProduits();
-          this.showFournisseurPopup = false;
-          this.selectedProduitIdForAffectation = null;
-        });
-    }
-  }
   getNomFournisseur(fournisseurId: number | undefined): string {
     if (!fournisseurId) return 'Aucun';
     const fournisseur = this.fournisseurs.find(f => f.id === fournisseurId);
