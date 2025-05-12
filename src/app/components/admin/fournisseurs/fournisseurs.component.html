@@ -8,6 +8,57 @@
   </button>
 </div>
 
+<!-- Filtres compacts alignés à droite pour les fournisseurs -->
+<div class="flex justify-end mb-2">
+  <div class="bg-blue-50 p-3 rounded shadow">
+    <div class="flex flex-wrap items-end gap-1">
+
+      <!-- Raison sociale -->
+      <div class="flex flex-col">
+        <label class="text-xs text-blue-800 mb-1">Raison sociale</label>
+        <input type="text"
+               [(ngModel)]="filters.raisonSociale"
+               placeholder="Ex: SARL XYZ"
+               class="px-2 py-1 border border-blue-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-400 w-40">
+      </div>
+
+      <!-- Nom d'utilisateur -->
+      <div class="flex flex-col">
+        <label class="text-xs text-blue-800 mb-1">Nom d'utilisateur</label>
+        <input type="text"
+               [(ngModel)]="filters.username"
+               placeholder="Ex: fournisseur01"
+               class="px-2 py-1 border border-blue-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-400 w-40">
+      </div>
+
+      <!-- Boutons -->
+      <div class="flex gap-2 pt-5">
+        <button (click)="applyFilters()"
+                class="flex items-center gap-1 bg-blue-600 text-white text-sm px-3 py-1.5 rounded hover:bg-blue-700 transition">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+               viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L15 13.414V19a1 1 0 01-1.447.894l-4-2A1 1 0 019 17v-3.586L3.293 6.707A1 1 0 013 6V4z"/>
+          </svg>
+          Appliquer
+        </button>
+
+        <button (click)="resetFilters()"
+                class="flex items-center gap-1 bg-gray-300 text-sm text-gray-800 px-3 py-1.5 rounded hover:bg-gray-400 transition">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+               viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M4 4v5h.582M20 20v-5h-.581M20 4l-3.5 3.5M4 20l3.5-3.5M17 13A5 5 0 007 13m10 0a5 5 0 01-10 0" />
+          </svg>
+          Réinitialiser
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
 <!-- Modal d'Ajout/Modification -->
 <div *ngIf="showModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
   <div class="bg-white p-8 rounded-xl w-full max-w-md border-t-4 border-blue-600 shadow-lg">
@@ -17,7 +68,7 @@
     <form (ngSubmit)="saveFournisseur(fournisseurForm)" #fournisseurForm="ngForm">
       <!-- Username -->
       <div class="mb-4">
-        <input type="text" placeholder="Nom d'utilisateur" name="username" [(ngModel)]="fournisseur.username" required #username="ngModel"
+        <input type="text" placeholder="Nom du fournisseur" name="username" [(ngModel)]="fournisseur.username" required #username="ngModel"
                class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2"
                [class.border-red-500]="username.invalid && username.touched"
                [class.border-blue-300]="!(username.invalid && username.touched)" />

@@ -12,7 +12,10 @@ export class HistoriqueReceptionService {
 
   constructor(private http: HttpClient) {}
 
-  getHistorique(page: number, size: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}?page=${page}&size=${size}`);
+  // getHistorique(page: number, size: number): Observable<any> {
+  //   return this.http.get<any>(`${this.apiUrl}?page=${page}&size=${size}`);
+  // }
+  getHistorique(params: any): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}`, { params });
   }
 }

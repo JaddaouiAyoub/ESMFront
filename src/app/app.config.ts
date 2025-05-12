@@ -6,6 +6,7 @@ import {provideHttpClient, withInterceptors} from '@angular/common/http';
 import {authInterceptorFn} from './interceptors/auth.interceptor';
 import {provideAnimations} from '@angular/platform-browser/animations';
 import {provideToastr} from 'ngx-toastr';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 export const appConfig: ApplicationConfig = {
   providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes),provideHttpClient(withInterceptors([authInterceptorFn]),
@@ -14,6 +15,6 @@ export const appConfig: ApplicationConfig = {
     provideToastr({
       positionClass: 'toast-top-center',
       timeOut: 3000
-    })
+    }), provideAnimationsAsync()
   ]
 };

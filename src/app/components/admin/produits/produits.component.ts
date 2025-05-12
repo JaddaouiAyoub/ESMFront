@@ -1,9 +1,11 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {ProduitDTO, ProduitService} from '../../../services/produit.service';
 import {FournisseurDTO, FournisseurService} from '../../../services/fournisseur.service';
 import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import {data} from 'autoprefixer';
+import {id} from '@swimlane/ngx-charts';
 
 @Component({
   selector: 'app-produits',
@@ -18,7 +20,7 @@ import { ToastrService } from 'ngx-toastr';
   styleUrl: './produits.component.css'
 })
 
-export class ProduitsComponent implements OnInit {
+export class ProduitsComponent implements OnInit , AfterViewInit {
   produits: ProduitDTO[] = [];
   fournisseurs: FournisseurDTO[] = [];
   showModal = false;
@@ -34,12 +36,14 @@ export class ProduitsComponent implements OnInit {
   page: number = 0;
   size: number = 5;
   totalPages: number = 0;
-
+  fournisseurNomId: { id: number, nom: string }[] = [];
 
   produit: ProduitDTO = {
     nom: '',
     quantiteStock: 0,
     quantiteVendu: 0,
+    stockInitiale: 0,
+    leadTime:0,
     reorderPoint: 0,
     prix: 0,
     fournisseurId: undefined,
@@ -52,8 +56,7 @@ export class ProduitsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getProduits();
-    this.getFournisseurs();
+    this.applyFilters();
   }
 
   getProduits() {
@@ -92,7 +95,9 @@ export class ProduitsComponent implements OnInit {
         nom: '',
         quantiteStock: null,
         quantiteVendu: null,
-        reorderPoint: null,
+        stockInitiale:null,
+        leadTime:null,
+        reorderPoint: 0,
         prix: null,
         fournisseurId: 0,
       }as ProduitDTO;
@@ -155,6 +160,7 @@ export class ProduitsComponent implements OnInit {
     return fournisseur ? fournisseur.username : 'Aucun';
   }
 
+
   // Ouvrir le modal pour affecter un fournisseur
   openFournisseurModal(produit: ProduitDTO): void {
     this.produitToAffecter = produit; // On garde en mémoire le produit à affecter
@@ -187,4 +193,37 @@ export class ProduitsComponent implements OnInit {
         });
     }
   }
+  filters = {
+    nom: '',
+    sousSeuil: null as boolean | null | undefined ,
+    fournisseurId: null as number | null | undefined
+  };
+
+  applyFilters() {
+    const { nom, sousSeuil, fournisseurId } = this.filters;
+    this.produitService.getProduitsFiltres(0, 10, nom, sousSeuil, fournisseurId).subscribe(res => {
+      this.produits = res.content;
+      this.totalPages = res.totalPages;
+    });
+  }
+
+  resetFilters() {
+    this.filters = {
+      nom: '',
+      sousSeuil: null,
+      fournisseurId: null
+    };
+    this.applyFilters();
+  }
+  loadFournisseurs() {
+    this.fournisseurService.getAllFournisseurNomId().subscribe(data => {
+      this.fournisseurNomId = data;
+    });
+  }
+
+  ngAfterViewInit(): void {
+    this.loadFournisseurs()
+    this.getFournisseurs();
+  }
+
 }

@@ -6,6 +6,8 @@ export interface DashboardStats {
   commandesConfirmees: number;
   commandesEnRetard: number;
   montantTotalCommandes: number;
+  montantTotalVentes:number; // <-- AJOUT ICI
+
   produitsSousSeuil: number;
   commandesParStatut: { [statut: string]: number };
   commandesParFournisseur: { [codeFournisseur: string]: number };

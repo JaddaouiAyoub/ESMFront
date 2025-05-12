@@ -12,6 +12,10 @@ export interface FournisseurDTO {
   phoneNumber: string;
   code?: string; // généré automatiquement
 }
+interface FournisseurNomId {
+  id: number;
+  nom: string;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -31,9 +35,9 @@ export class FournisseurService {
   getAllFournisseurs(): Observable<FournisseurDTO[]> {
     return this.http.get<FournisseurDTO[]>(`${this.baseUrl}/all`);
   }
-  getFournisseurs(page: number, size: number): Observable<any> {
-    return this.http.get<any>(`${this.baseUrl}?page=${page}&size=${size}`);
-  }
+  // getFournisseurs(page: number, size: number): Observable<any> {
+  //   return this.http.get<any>(`${this.baseUrl}?page=${page}&size=${size}`);
+  // }
 
 
   // ➤ Récupérer un fournisseur par ID
@@ -49,4 +53,12 @@ export class FournisseurService {
   deleteFournisseur(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
+  // ➤ Récupérer les fournisseurs avec leur nom et id
+  getAllFournisseurNomId(): Observable<FournisseurNomId[]> {
+    return this.http.get<FournisseurNomId[]>(`${this.baseUrl}/nom-id`);
+  }
+  getFournisseursFiltre(params: any): Observable<any> {
+    return this.http.get<FournisseurDTO>(`${this.baseUrl}`, { params });
+  }
+
 }

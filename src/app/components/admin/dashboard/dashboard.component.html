@@ -6,8 +6,12 @@
       <div class="text-2xl font-bold text-blue-600">{{ stats.totalCommandes }}</div>
     </div>
     <div class="bg-white p-4 rounded-2xl shadow text-center font-semibold">
-      Montant Total
+      Montant Total Commandes
       <div class="text-2xl font-bold text-green-600">{{ stats.montantTotalCommandes }} MAD</div>
+    </div>
+    <div class="bg-white p-4 rounded-2xl shadow text-center font-semibold">
+      Montant Total Ventes
+      <div class="text-2xl font-bold text-green-600">{{ stats.montantTotalVentes }} MAD</div>
     </div>
     <div routerLink="/dashboard/admin/commandes" class="bg-white p-4 rounded-2xl shadow text-center font-semibold cursor-pointer">
       En Cours
@@ -25,10 +29,10 @@
       Partiellement Reçues
       <div class="text-2xl font-bold text-orange-500">{{ stats.commandesPartiellementRecues }}</div>
     </div>
-    <div class="bg-white p-4 rounded-2xl shadow text-center font-semibold">
-      En Retard
-      <div class="text-2xl font-bold text-red-500">{{ stats.commandesEnRetard }}</div>
-    </div>
+<!--    <div class="bg-white p-4 rounded-2xl shadow text-center font-semibold">-->
+<!--      En Retard-->
+<!--      <div class="text-2xl font-bold text-red-500">{{ stats.commandesEnRetard }}</div>-->
+<!--    </div>-->
     <div routerLink="/dashboard/admin/produits"
       class="bg-yellow-100 p-4 rounded-2xl shadow text-center font-semibold text-yellow-800 border-l-4 border-yellow-500 cursor-pointer"
       *ngIf="stats.produitsSousSeuil > 0"
@@ -39,7 +43,7 @@
   </div>
 
   <!-- Graphiques -->
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8" style="height: 500px;">
     <div class="bg-white p-4 rounded-2xl shadow h-85">
       <h2 class="text-lg font-semibold mb-4">Commandes par statut</h2>
       <ngx-charts-bar-vertical
@@ -52,11 +56,12 @@
         [roundEdges]="true"
         [barPadding]="8"
         [animations]="true"
+        [view]="[550, 400]"
       >
       </ngx-charts-bar-vertical>
     </div>
 
-    <div class="bg-white p-4 rounded-2xl shadow">
+    <div class="bg-white p-4 rounded-2xl shadow" style="height: 500px;">
       <h2 class="text-lg font-semibold mb-4">Commandes par fournisseur</h2>
       <ngx-charts-pie-chart
         [results]="fournisseurChartData"
@@ -71,7 +76,7 @@
     </div>
   </div>
 
-  <div class="bg-white p-4 rounded-2xl shadow  ">
+  <div class="bg-white p-4 rounded-2xl shadow  " style="height: 330px;">
     <h2 class="text-lg font-semibold mb-4">Top produits commandés</h2>
     <ngx-charts-bar-horizontal
       [results]="topProduitsChartData"
@@ -80,7 +85,22 @@
       [yAxis]="true"
       [legend]="false"
       [showDataLabel]="true"
+      [view]="[950,250]"
       [barPadding]="2">
     </ngx-charts-bar-horizontal>
   </div>
+  <div class="bg-white p-4 rounded-2xl shadow mt-5 " style="height: 330px;">
+    <h2 class="text-lg font-semibold mb-4">Top produits vendus</h2>
+    <ngx-charts-bar-horizontal
+      [results]="topProduitsVendusChartData"
+      [scheme]="'cool'"
+      [xAxis]="true"
+      [yAxis]="true"
+      [legend]="false"
+      [showDataLabel]="true"
+      [view]="[950,250]"
+      [barPadding]="2">
+    </ngx-charts-bar-horizontal>
+  </div>
+
 </div>

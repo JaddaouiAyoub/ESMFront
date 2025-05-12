@@ -45,27 +45,29 @@ export class FournisseursComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadFournisseurs();
+    // this.loadFournisseurs();
+    this.getFournisseurs();
   }
 
-  loadFournisseurs() {
-    this.isLoading=true;
-    this.fournisseurService.getFournisseurs(this.page, this.size).subscribe({
-      next: (res) => {
-        this.fournisseurs = res.content;
-        this.totalPages = res.totalPages;
-        this.isLoading = false;
-      },
-      error: () => {
-        this.isLoading = false
-        this.toastr.error('Erreur de chargement des fournisseurs');
-      }
-    });
-  }
+  // loadFournisseurs() {
+  //   this.isLoading=true;
+  //   this.fournisseurService.getFournisseurs(this.page, this.size).subscribe({
+  //     next: (res) => {
+  //       this.fournisseurs = res.content;
+  //       this.totalPages = res.totalPages;
+  //       this.isLoading = false;
+  //     },
+  //     error: () => {
+  //       this.isLoading = false
+  //       this.toastr.error('Erreur de chargement des fournisseurs');
+  //     }
+  //   });
+  // }
 
   changePage(newPage: number) {
     this.page = newPage;
-    this.loadFournisseurs();
+    // this.loadFournisseurs();
+    this.getFournisseurs();
   }
 
   // Ouvrir le modal en mode édition ou ajout
@@ -92,7 +94,8 @@ export class FournisseursComponent implements OnInit {
           this.isSaving = false;
           this.closeModal();
           this.toastr.success('Fournisseur mis à jour avec succès');
-          this.loadFournisseurs();
+          // this.loadFournisseurs();
+          this.getFournisseurs();
         },
         () => {
           this.isSaving = false;
@@ -105,7 +108,8 @@ export class FournisseursComponent implements OnInit {
           this.isSaving = false;
           this.closeModal();
           this.toastr.success('Fournisseur ajouté avec succès');
-          this.loadFournisseurs();
+          // this.loadFournisseurs();
+          this.getFournisseurs();
         },
         (error) => {
           this.isSaving = false;
@@ -129,7 +133,8 @@ export class FournisseursComponent implements OnInit {
         this.fournisseurService.deleteFournisseur(id).subscribe({
           next: () => {
             this.toastr.success("Le fournisseur a été supprimé avec succès")
-            this.loadFournisseurs()
+            // this.loadFournisseurs()
+            this.getFournisseurs();
           },
           error: () => this.toastr.error('Erreur suppression fournisseur')
         });
@@ -150,5 +155,48 @@ export class FournisseursComponent implements OnInit {
       phoneNumber: '',
       role: 'FOURNISSEUR' // Ne pas oublier de fixer à nouveau le rôle ici
     };
+  }
+  getFournisseurs(): void {
+    this.isLoading = true;
+    const params: any = {
+      page: this.page,
+      size: this.size
+    };
+
+    if (this.filters.raisonSociale?.trim()) {
+      params.raisonSociale = this.filters.raisonSociale.trim();
+    }
+
+    if (this.filters.username?.trim()) {
+      params.username = this.filters.username.trim();
+    }
+
+    this.fournisseurService.getFournisseursFiltre(params).subscribe({
+      next: (response) => {
+        this.isLoading = false;
+        // console.log('Réponse de la requête :', response);
+        this.fournisseurs = response.content;
+        this.totalPages = response.totalPages;
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.toastr.error('Erreur de récupération des fournisseurs', 'Erreur');
+        console.error('Erreur de récupération des fournisseurs :', err);
+      }
+    });
+  }
+
+  applyFilters(): void {
+    this.page = 0;
+    this.getFournisseurs();
+  }
+  filters = {
+    raisonSociale: '',
+    username: ''
+  };
+  resetFilters(): void {
+    this.filters = { raisonSociale: '', username: '' };
+    this.page = 0;
+    this.getFournisseurs();
   }
 }

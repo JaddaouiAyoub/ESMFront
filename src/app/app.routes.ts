@@ -12,6 +12,7 @@ import {ClientsComponent} from './components/admin/clients/clients.component';
 import {FournisseursComponent} from './components/admin/fournisseurs/fournisseurs.component';
 import {ReceptionCommandesComponent} from './components/admin/reception-commandes/reception-commandes.component';
 import {HistoriqueReceptionsComponent} from './components/admin/historique-receptions/historique-receptions.component';
+import {VentesComponent} from './components/admin/ventes/ventes.component';
 
 export const routes: Routes = [
   {
@@ -33,6 +34,7 @@ export const routes: Routes = [
       { path: 'clients', component: ClientsComponent },
       { path: 'reception-commandes', component: ReceptionCommandesComponent },
       { path: 'historique-receptions', component: HistoriqueReceptionsComponent },
+      { path: 'ventes' , component:VentesComponent},
     ]
   },
   {

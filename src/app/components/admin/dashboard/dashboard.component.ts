@@ -4,6 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import {DashboardStats} from './dashboard-stats.model';
 import {DashboardService} from '../../../services/dashboard.service';
 import {RouterLink} from '@angular/router';
+import {VenteService} from '../../../services/vente.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -20,8 +21,9 @@ export class DashboardComponent implements OnInit {
   statutChartData: any[] = [];
   fournisseurChartData: any[] = [];
   topProduitsChartData: any[] = [];
+  topProduitsVendusChartData: any[]=[];
 
-  constructor(private dashboardService: DashboardService) {}
+  constructor(private dashboardService: DashboardService , private venteService : VenteService) {}
 
   ngOnInit(): void {
     this.dashboardService.getDashboardStats().subscribe({
@@ -35,6 +37,9 @@ export class DashboardComponent implements OnInit {
       error: (err) => {
         console.error('Erreur lors du chargement du dashboard :', err);
       }
+    });
+    this.venteService.getTopProduitsVendus().subscribe(data => {
+      this.topProduitsVendusChartData = data;
     });
   }
 
